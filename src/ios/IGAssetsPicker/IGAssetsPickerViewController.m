@@ -15,7 +15,6 @@
 {
     CGFloat beginOriginY;
 }
-@property (strong, nonatomic) UIView *topView;
 @property (strong, nonatomic) UIImageView *maskView;
 @property (strong, nonatomic) IGCropView *cropView;
 
@@ -34,8 +33,7 @@
     [super loadView];
     self.view.backgroundColor = [UIColor blackColor];
 
-    [self.view addSubview:self.topView];
-    [self.view insertSubview:self.collectionView belowSubview:self.topView];
+    [self.view addSubview:self.collectionView];
 
 }
 
