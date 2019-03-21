@@ -36,6 +36,7 @@ static UIColor *videoTitleColor;
     [super setSelected:selected];
     [self setNeedsDisplay];
     //animation
+    /*
     if(selected)
     {
         [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionAllowUserInteraction animations:^{
@@ -48,6 +49,7 @@ static UIColor *videoTitleColor;
             }];
         }];
     }
+    */
     
 }
 
