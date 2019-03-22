@@ -93,10 +93,9 @@
 {
     if(!_videoStartMaskView)
     {
-        self.videoStartMaskView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"InstagramAssetsPicker.bundle/Start"] ];
+        self.videoStartMaskView =[UIImageView alloc];
         //FIXME: should use constraint
         self.videoStartMaskView.frame = CGRectMake(self.superview.frame.size.width / 2 + self.superview.frame.origin.x - 25, self.superview.frame.size.height / 2 + self.superview.frame.origin.y - 25, 50, 50);
-        [self.superview addSubview:self.videoStartMaskView];
         self.videoStartMaskView.hidden = YES;
     }
     return _videoStartMaskView;
@@ -483,10 +482,9 @@ static CGRect IGScaleRect(CGRect rect, CGFloat scale)
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self addSubview:self.videoPlayer.view];
-                [self.videoPlayer play];
                 [self configureForImageSize:self.videoPlayer.view.frame.size];
 
-                _playState = 1;
+                _playState = 2;
             });
 
         }];
@@ -519,28 +517,12 @@ static CGRect IGScaleRect(CGRect rect, CGFloat scale)
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if((self.videoPlayer) && (_playState == 2))
-    {
-        _playState = 1;
-        [self.videoPlayer play];
-        self.videoStartMaskView.hidden = YES;
-
-
-    } else if((self.videoPlayer) && (_playState == 1)) {
-        _playState = 2;
-        [self.videoPlayer pause];
-        self.videoStartMaskView.hidden = NO;
-    }
 
 }
 
 -(void) stopPlayingIfNecessary
 {
-    if((self.videoPlayer) && (_playState == 1)) {
-        _playState = 2;
-        [self.videoPlayer stop];
-        self.videoStartMaskView.hidden = NO;
-    }
+
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -551,8 +533,7 @@ static CGRect IGScaleRect(CGRect rect, CGFloat scale)
 #pragma mark - MPMoviePlayerController Notification
 - (void) playerDidFinishedCallBack:(NSNotification *)notification
 {
-    _playState = 2;
-    self.videoStartMaskView.hidden = NO;
+
 
 }
 
