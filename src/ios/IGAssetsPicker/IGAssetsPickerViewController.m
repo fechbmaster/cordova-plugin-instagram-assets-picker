@@ -15,6 +15,7 @@
 {
     CGFloat beginOriginY;
 }
+@property (strong, nonatomic) UIView *topView;
 @property (strong, nonatomic) UIImageView *maskView;
 @property (strong, nonatomic) IGCropView *cropView;
 
@@ -33,6 +34,7 @@
     [super loadView];
     self.view.backgroundColor = [UIColor blackColor];
 
+    [self.view addSubview:self.topView];
     [self.view addSubview:self.collectionView];
 
 }
@@ -126,38 +128,11 @@
         [cropBtn addTarget:self action:@selector(cropAction) forControlEvents:UIControlEventTouchUpInside];
         [navView addSubview:cropBtn];
 
-        rect = CGRectMake(0, CGRectGetHeight(self.topView.bounds)-handleHeight, CGRectGetWidth(self.topView.bounds), handleHeight);
-        UIView *dragView = [[UIView alloc] initWithFrame:rect];
-        dragView.backgroundColor = navView.backgroundColor;
-        dragView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        [self.topView addSubview:dragView];
-
-        UIImage *img = [UIImage imageNamed:@"InstagramAssetsPicker.bundle/cameraroll-picker-grip"];
-        rect = CGRectMake((CGRectGetWidth(dragView.bounds)-img.size.width)/2, (CGRectGetHeight(dragView.bounds)-img.size.height)/2, img.size.width, img.size.height);
-        UIImageView *gripView = [[UIImageView alloc] initWithFrame:rect];
-        gripView.image = img;
-        [dragView addSubview:gripView];
-
-        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
-        [dragView addGestureRecognizer:panGesture];
-
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureAction:)];
-        [dragView addGestureRecognizer:tapGesture];
-
-        [tapGesture requireGestureRecognizerToFail:panGesture];
-
         rect = CGRectMake(0, handleHeight, CGRectGetWidth(self.topView.bounds), CGRectGetHeight(self.topView.bounds)-handleHeight*2);
         self.cropView = [[IGCropView alloc] initWithFrame:rect];
-        [self.topView addSubview:self.cropView];
+        self.cropView.hidden = YES;
+        [self.topView insertSubview:self.cropView belowSubview:self.collectionView];
         [self.topView sendSubviewToBack:self.cropView];
-
-        if (self.showGrid) {
-            self.maskView = [[UIImageView alloc] initWithFrame:rect];
-            self.maskView.image = [UIImage imageNamed:@"InstagramAssetsPicker.bundle/straighten-grid"];
-
-            UIPanGestureRecognizer *cropViewPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(cropViewPanGestureAction:)];
-            [self.cropView addGestureRecognizer:cropViewPanGesture];
-        }
     }
     return _topView;
 }
@@ -173,7 +148,7 @@
         layout.minimumInteritemSpacing      = spacing;
         layout.minimumLineSpacing           = spacing;
 
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.topView.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-CGRectGetHeight(self.topView.bounds));
+        CGRect rect = CGRectMake(0, 44.0f, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
         _collectionView = [[UICollectionView alloc] initWithFrame:rect collectionViewLayout:layout];
         _collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _collectionView.dataSource = self;
