@@ -32,7 +32,7 @@
 
 - (void)loadView {
     [super loadView];
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor whiteColor];
 
     [self.view addSubview:self.topView];
     [self.view addSubview:self.collectionView];
@@ -93,39 +93,44 @@
 - (UIView *)topView {
     if (_topView == nil) {
         CGFloat handleHeight = 44.0f;
-        CGRect rect = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetWidth(self.view.bounds)+handleHeight*2);
+        CGRect screen = [[UIScreen mainScreen] bounds];
+        CGRect rect = CGRectMake(0, 0, CGRectGetWidth(screen), handleHeight*2);
         self.topView = [[UIView alloc] initWithFrame:rect];
         self.topView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
         self.topView.backgroundColor = [UIColor clearColor];
         self.topView.clipsToBounds = YES;
 
-        rect = CGRectMake(0, 0, CGRectGetWidth(self.topView.bounds), handleHeight);
+        rect = CGRectMake(0, 0, CGRectGetWidth(screen), handleHeight);
         UIView *navView = [[UIView alloc] initWithFrame:rect];//26 29 33
-        navView.backgroundColor = [[UIColor colorWithRed:26.0/255 green:29.0/255 blue:33.0/255 alpha:1] colorWithAlphaComponent:.8f];
+        navView.backgroundColor = [UIColor whiteColor];
+        navView.layer.borderWidth = 1;
+        navView.layer.borderColor = UIColor.lightGrayColor.CGColor;
         [self.topView addSubview:navView];
 
-        rect = CGRectMake(0, 0, 60, CGRectGetHeight(navView.bounds));
+        rect = CGRectMake(0, 0, 60, handleHeight);
         UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         backBtn.frame = rect;
         [backBtn setImage:[UIImage imageNamed:@"InstagramAssetsPicker.bundle/back"] forState:UIControlStateNormal];
         [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
         [navView addSubview:backBtn];
-
-        rect = CGRectMake((CGRectGetWidth(navView.bounds)-100)/2, 0, 100, CGRectGetHeight(navView.bounds));
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:rect];
-        titleLabel.text = @"SELECT";
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.backgroundColor = [UIColor clearColor];
-        titleLabel.textColor = [UIColor whiteColor];
-        titleLabel.font = [UIFont boldSystemFontOfSize:18.0f];
-        [navView addSubview:titleLabel];
-
-        rect = CGRectMake(CGRectGetWidth(navView.bounds)-80, 0, 80, CGRectGetHeight(navView.bounds));
+        
+        CGFloat offset = 0.0f;
+        if (screen.size.width > screen.size.height) {
+            offset = screen.size.height - 45;
+        }
+        else {
+            offset = screen.size.width - 45;
+        }
+        
+        rect = CGRectMake(offset, 2, 40, 40);
         UIButton *cropBtn = [[UIButton alloc] initWithFrame:rect];
         [cropBtn setTitle:@"OK" forState:UIControlStateNormal];
-        [cropBtn.titleLabel setFont:[UIFont systemFontOfSize:14.0f]];
-        [cropBtn setTitleColor:[UIColor cyanColor] forState:UIControlStateNormal];
+        [cropBtn.titleLabel setFont:[UIFont systemFontOfSize:16.0f]];
+        [cropBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [cropBtn addTarget:self action:@selector(cropAction) forControlEvents:UIControlEventTouchUpInside];
+        cropBtn.backgroundColor = [UIColor colorWithRed:0.91 green:0.20 blue:0.29 alpha:1.0];
+        cropBtn.layer.cornerRadius = 20;
+        cropBtn.clipsToBounds = YES;
         [navView addSubview:cropBtn];
 
         rect = CGRectMake(0, handleHeight, CGRectGetWidth(self.topView.bounds), CGRectGetHeight(self.topView.bounds)-handleHeight*2);
