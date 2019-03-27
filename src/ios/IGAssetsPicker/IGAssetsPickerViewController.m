@@ -94,13 +94,13 @@
     if (_topView == nil) {
         CGFloat handleHeight = 44.0f;
         CGRect screen = [[UIScreen mainScreen] bounds];
-        CGRect rect = CGRectMake(0, 0, CGRectGetWidth(screen), handleHeight*2);
+        CGRect rect = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetWidth(self.view.bounds)+handleHeight*2);
         self.topView = [[UIView alloc] initWithFrame:rect];
         self.topView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
         self.topView.backgroundColor = [UIColor clearColor];
         self.topView.clipsToBounds = YES;
 
-        rect = CGRectMake(0, 0, CGRectGetWidth(screen), handleHeight);
+        rect = CGRectMake(0, 0, CGRectGetWidth(self.topView.bounds), handleHeight);
         UIView *navView = [[UIView alloc] initWithFrame:rect];//26 29 33
         navView.backgroundColor = [UIColor whiteColor];
         navView.layer.borderWidth = 1;
@@ -159,6 +159,7 @@
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         _collectionView.backgroundColor = [UIColor clearColor];
+        _collectionView.alwaysBounceVertical = YES;
 
         [_collectionView registerClass:[IGAssetsCollectionViewCell class] forCellWithReuseIdentifier:@"IGAssetsCollectionViewCell"];
     }
